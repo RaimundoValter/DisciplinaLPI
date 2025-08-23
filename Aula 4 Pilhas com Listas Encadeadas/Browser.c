@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include ".\TAD_PILHA_LINKS\TAD_PILHA_LINKS.h"
-#include <stdio.h>
 
 int main(){
 
