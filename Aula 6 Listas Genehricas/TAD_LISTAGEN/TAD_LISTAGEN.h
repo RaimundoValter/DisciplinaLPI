@@ -17,6 +17,8 @@
     Listagen* lstgen_retira(Listagen* l,  int (*compara)(void*, void*), void* dado);
     Listagen* lstgen_duplica(Listagen* l, void* (*duplica)(void*));
     void lstgen_libera(Listagen* l);
+    Listagen* lstgen_filtra(Listagen* l, int (*criterio)(void*));
+    Listagen* lstgen_ordena(Listagen* l, int (*compara)(void*, void*));
 
     #include "TAD_LISTAGEN.c"
 #endif

@@ -48,7 +48,101 @@ void lstgen_percorre(Listagen* l, void (*processa)(void*)){
 
 }
 
-void* lstgen_busca(Listagen* l, int (*compara)(void*, void*), void* dado);
-Listagen* lstgen_retira(Listagen* l,  int (*compara)(void*, void*), void* dado);
+/*
+*   BUSCA ELEMENTO DA LISTA
+*       Retorna o ponteiro para a informação, caso ela esteja na lista,
+*       do contrário, retorna NULL.
+*/
+void* lstgen_busca(Listagen* l, int (*compara)(void*, void*), void* dado){
+    Listagen* p = l;
+
+    while(p != NULL){
+        if(compara(p->info, dado)) return p->info;
+        p= p->prox;
+    }
+
+    return NULL;
+}
+
+/*
+*   RETIRA ELEMENTO DA LISTA
+*       Retira o primeiro elemento da lista encontrado que retorna 1 ao 
+*       comparar dado com info do elemento presente na lista.
+*/
+Listagen* lstgen_retira(Listagen* l,  int (*compara)(void*, void*), void* dado){
+    Listagen* p = l;
+    Listagen *ant = NULL;
+
+    while(p!= NULL){
+
+        if(compara(p->info, dado)){
+
+            if(ant == NULL){
+                Listagen* temp = p->prox;
+                free(p);
+                l=temp;
+            }
+            else{
+                ant->prox = p->prox;
+                free(p);
+            }
+
+            return l;
+        }
+
+        ant = p;
+        p = p->prox;
+    }
+
+    return l;
+}
+
+/*
+*   DUPLICA UMA LISTA
+*       Retorna o ponteiro para a nova lista passada por parâmetro.
+*/
 Listagen* lstgen_duplica(Listagen* l, void* (*duplica)(void*));
-void lstgen_libera(Listagen* l);
+
+/*
+*   LIBERA 
+*       libera a memória ocupada pela lista genérica.
+*/
+void lstgen_libera(Listagen* l){
+
+    Listagen* p = l;
+
+    while(p != NULL){
+        free(p->info);
+        Listagen* temp = p->prox;
+        free(p);
+        p = temp; 
+    }
+
+}
+
+/*
+*   FILTRA ELEMENTOS DE UMA LISTA
+*       Retorna uma lista contendo apenas os elementos filtrados pelo critério.
+*       Esta função não copia as informações.
+*       Retorna o ponteiro para uma lista contendo a referência aos elementos da lista original.
+*/
+Listagen* lstgen_filtra(Listagen* l, int (*criterio)(void*)){
+    Listagen* nova_lista = lstgen_cria();
+    Listagen* p = nova_lista;
+
+    while(p != NULL){
+        if(criterio(p->info))
+            nova_lista = lstgen_insere(nova_lista, p->info);
+        p = p->prox;
+    }
+
+    return nova_lista;
+}
+
+/*
+* ORDENA
+*   Ordena a lista genérica de acordo com a função compara.
+*   Caso compara retorne 1, a troca de posição entre os elementos 
+*   será realizada, do contrário, não. 
+*/
+Listagen* lstgen_ordena(Listagen* l, int (*compara)(void*, void*));
