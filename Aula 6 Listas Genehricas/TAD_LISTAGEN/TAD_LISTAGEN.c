@@ -97,11 +97,6 @@ Listagen* lstgen_retira(Listagen* l,  int (*compara)(void*, void*), void* dado){
     return l;
 }
 
-/*
-*   DUPLICA UMA LISTA
-*       Retorna o ponteiro para a nova lista passada por parâmetro.
-*/
-Listagen* lstgen_duplica(Listagen* l, void* (*duplica)(void*));
 
 /*
 *   LIBERA 
@@ -128,7 +123,7 @@ void lstgen_libera(Listagen* l){
 */
 Listagen* lstgen_filtra(Listagen* l, int (*criterio)(void*)){
     Listagen* nova_lista = lstgen_cria();
-    Listagen* p = nova_lista;
+    Listagen* p = l;
 
     while(p != NULL){
         if(criterio(p->info))
@@ -140,9 +135,37 @@ Listagen* lstgen_filtra(Listagen* l, int (*criterio)(void*)){
 }
 
 /*
+*   DUPLICA UMA LISTA
+*       Retorna o ponteiro para a nova lista passada por parâmetro.
+*/
+Listagen* lstgen_duplica(Listagen* l, void* (*duplica)(void*)){
+    Listagen* nova_lista= lstgen_cria();
+    for(Listagen* p = l; p != NULL; p = p->prox)
+        nova_lista = lstgen_insere(nova_lista, duplica(p->info));
+    
+    return nova_lista;
+}
+
+/*
 * ORDENA
 *   Ordena a lista genérica de acordo com a função compara.
 *   Caso compara retorne 1, a troca de posição entre os elementos 
-*   será realizada, do contrário, não. 
+*   será realizada, do contrário, não.
+*   Esta função usa o algoritmo selection sort.
 */
-Listagen* lstgen_ordena(Listagen* l, int (*compara)(void*, void*));
+Listagen* lstgen_ordena(Listagen* l, int (*compara)(void*, void*)){
+
+    for(Listagen* p = l; p != NULL; p = p->prox){
+        Listagen* q = p->prox;
+        while(q != NULL){
+            if(compara(p->info, q->info)){
+                void* aux = q->info;
+                q->info = p->info;
+                p->info = aux;
+            }
+            q = q->prox;
+        }
+    }
+
+    return l;
+}
