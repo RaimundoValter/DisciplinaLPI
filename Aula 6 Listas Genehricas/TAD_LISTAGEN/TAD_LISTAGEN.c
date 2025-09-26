@@ -1,5 +1,6 @@
 #include "TAD_LISTAGEN.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 /*
 *   CRIA LISTA
@@ -179,7 +180,26 @@ Listagen* lstgen_ordena(Listagen* l, int (*compara)(void*, void*)){
 *   @return: 1 caso deu certo e 0 caso contrário.
 */
 int lstgen_grava_csv(Listagen* l, char* nome_arquivo_csv, char* (*cria_linha_csv)(void*)){
+    FILE* saida_csv = fopen(nome_arquivo_csv, "wt");
+    char* string_csv;
 
+    if(!saida_csv){
+        printf("Não conseguimos abrir o arquivo no caminho %s...\n", nome_arquivo_csv);
+        return 0;
+    }
+
+    for(Listagen* p = l; p!= NULL; p =p->prox){
+        string_csv = cria_linha_csv(p->info);
+        int i = 0;
+        while(string_csv[i] != '\0'){
+            fputc(string_csv[i], saida_csv);
+        }
+        fputc('\n', saida_csv);
+    }
+
+    free(string_csv);
+
+    fclose(saida_csv);
 }
 
 /*

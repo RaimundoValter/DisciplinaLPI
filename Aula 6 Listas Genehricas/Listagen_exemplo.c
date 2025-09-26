@@ -13,6 +13,8 @@ void cliente_imprime(void* info);
 void* cliente_cria(int id);
 void* cliente_duplica(void* info);
 int cliente_ordena_crescente(void* cliente1, void* cliente2);
+char* cria_linha_cliente(void* info);
+
 
 int main(){
 
@@ -42,6 +44,14 @@ int main(){
     
     lstgen_percorre(minha_lista_dupllicada, cliente_imprime);
 
+    
+    printf("Gravando no arquivo...");
+    
+    if(lstgen_grava_csv(minha_lista, "listagen_cliente.csv", cria_linha_cliente))
+        printf("Deu certo!\n");
+    else
+        printf("Não conseguimos gravar no arquivo...\n");
+    
     lstgen_libera(minha_lista);
     lstgen_libera(minha_lista_dupllicada);
     
@@ -94,4 +104,11 @@ int cliente_ordena_crescente(void* cliente1, void* cliente2){
         return 1;
     else
         return 0;
+}
+
+char* cria_linha_cliente(void* info){
+    char* linha_csv = (char*)malloc();
+
+
+    return linha_csv;
 }
