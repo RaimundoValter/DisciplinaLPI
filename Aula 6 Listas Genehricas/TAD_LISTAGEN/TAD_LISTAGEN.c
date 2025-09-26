@@ -169,3 +169,28 @@ Listagen* lstgen_ordena(Listagen* l, int (*compara)(void*, void*)){
 
     return l;
 }
+
+
+/*
+* GRAVA ARQUIVO PARA CSV
+*   Grava um arquivo CSV contendo as informações da lista genérica.
+*   @params: lista l, nome_arquivo e callback para criar uma string 
+*   no formato CSV a partir de um elemento da lista.
+*   @return: 1 caso deu certo e 0 caso contrário.
+*/
+int lstgen_grava_csv(Listagen* l, char* nome_arquivo_csv, char* (*cria_linha_csv)(void*)){
+
+}
+
+/*
+* CARREGA ARQUIVO DO CSV
+*   Recupera os registro de uma lista genérica a partir de um arquivo CSV.
+*   @params: nome do arquivo CSV, callback para formar um elemento da lista
+*   a partir da string recuperada do arquivo contendo uma linha.
+*   @return: ponteiro para uma lista genérica carregada na memória principal.
+*   Returna NULL caso não consiga carregar ou o arquivo esteja vazio.    
+*/
+Listagen* lstgen_carrega_csv(char* nome_arquivo_csv, void* (*cria_elemento)(char* linha_csv)){
+
+}
+

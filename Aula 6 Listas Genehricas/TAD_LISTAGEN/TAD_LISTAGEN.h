@@ -19,6 +19,9 @@
     void lstgen_libera(Listagen* l);
     Listagen* lstgen_filtra(Listagen* l, int (*criterio)(void*));
     Listagen* lstgen_ordena(Listagen* l, int (*compara)(void*, void*));
+    int lstgen_grava_csv(Listagen* l, char* nome_arquivo_csv, char* (*cria_linha_csv)(void*));
+    Listagen* lstgen_carrega_csv(char* nome_arquivo_csv, void* (*cria_elemento)(char* linha_csv));
+
 
     #include "TAD_LISTAGEN.c"
 #endif
