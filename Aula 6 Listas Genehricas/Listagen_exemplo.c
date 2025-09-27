@@ -14,18 +14,19 @@ void* cliente_cria(int id);
 void* cliente_duplica(void* info);
 int cliente_ordena_crescente(void* cliente1, void* cliente2);
 char* cria_linha_cliente(void* info);
-
+void* cria_cliente_da_linha(char* linha);
 
 int main(){
 
-    Listagen* minha_lista = lstgen_cria();
+    // Listagen* minha_lista = lstgen_cria();
 
-    minha_lista = lstgen_insere(minha_lista, cliente_cria(1));
-    minha_lista = lstgen_insere(minha_lista, cliente_cria(2));
-    minha_lista = lstgen_insere(minha_lista, cliente_cria(3));
-    minha_lista = lstgen_insere(minha_lista, cliente_cria(4));
-    minha_lista = lstgen_insere(minha_lista, cliente_cria(5));
+    // minha_lista = lstgen_insere(minha_lista, cliente_cria(1));
+    // minha_lista = lstgen_insere(minha_lista, cliente_cria(2));
+    // minha_lista = lstgen_insere(minha_lista, cliente_cria(3));
+    // minha_lista = lstgen_insere(minha_lista, cliente_cria(4));
+    // minha_lista = lstgen_insere(minha_lista, cliente_cria(5));
 
+    Listagen* minha_lista = lstgen_carrega_csv("listagen_cliente.csv", cria_cliente_da_linha);
     printf("\n### LISTA GENÉRICA ###\n");
     
     lstgen_percorre(minha_lista, cliente_imprime);
@@ -37,12 +38,12 @@ int main(){
     
     lstgen_percorre(minha_lista, cliente_imprime);
 
-    Listagen* minha_lista_dupllicada = lstgen_duplica(minha_lista, cliente_duplica);
+    Listagen* minha_lista_duplicada = lstgen_duplica(minha_lista, cliente_duplica);
 
     printf("\n### LISTA GENÉRICA ####\n");
     printf("\n###### DUPLICADA ######\n");
     
-    lstgen_percorre(minha_lista_dupllicada, cliente_imprime);
+    lstgen_percorre(minha_lista_duplicada, cliente_imprime);
 
     
     printf("Gravando no arquivo...");
@@ -53,7 +54,7 @@ int main(){
         printf("Não conseguimos gravar no arquivo...\n");
     
     lstgen_libera(minha_lista);
-    lstgen_libera(minha_lista_dupllicada);
+    lstgen_libera(minha_lista_duplicada);
     
     return 0;
 }
@@ -107,8 +108,56 @@ int cliente_ordena_crescente(void* cliente1, void* cliente2){
 }
 
 char* cria_linha_cliente(void* info){
-    char* linha_csv = (char*)malloc();
 
+    char linha[121];
+    Cliente* info_cliente = (Cliente*)info;
+
+    sprintf(linha, "%d;%s;%s", info_cliente->id, info_cliente->nome, info_cliente->telefone);
+
+    char* linha_csv = (char*)malloc((strlen(linha)+1)*sizeof(char));
+
+    strcpy(linha_csv, linha);
 
     return linha_csv;
+}
+
+void* cria_cliente_da_linha(char* linha){
+    
+    Cliente* novo = malloc(sizeof(Cliente));
+    if (!novo) return NULL;
+
+    char* token;
+    int i = 1;
+
+    token = strtok(linha, ";");
+    
+    while (token != NULL) {
+        switch (i) {
+            case 1:
+                novo->id = atoi(token);
+                break;
+            case 2:
+                strncpy(novo->nome, token, sizeof(novo->nome) - 1);
+                novo->nome[sizeof(novo->nome) - 1] = '\0';
+                break;
+            case 3:
+                strncpy(novo->telefone, token, sizeof(novo->telefone) - 1);
+                novo->telefone[sizeof(novo->telefone) - 1] = '\0';
+                break;
+            default:
+                printf(">> Erro: linha com mais de 3 campos.\n");
+                free(novo);
+                return NULL;
+        }
+        token = strtok(NULL, ";");
+        i++;
+    }
+
+    if (i <= 3) { // não preencheu todos os campos
+        printf(">> Erro: linha com campos faltando.\n");
+        free(novo);
+        return NULL;
+    }
+
+    return novo;
 }

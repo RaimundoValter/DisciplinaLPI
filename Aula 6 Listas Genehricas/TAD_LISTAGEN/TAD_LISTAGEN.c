@@ -193,6 +193,7 @@ int lstgen_grava_csv(Listagen* l, char* nome_arquivo_csv, char* (*cria_linha_csv
         int i = 0;
         while(string_csv[i] != '\0'){
             fputc(string_csv[i], saida_csv);
+            i++;
         }
         fputc('\n', saida_csv);
     }
@@ -200,6 +201,8 @@ int lstgen_grava_csv(Listagen* l, char* nome_arquivo_csv, char* (*cria_linha_csv
     free(string_csv);
 
     fclose(saida_csv);
+
+    return 1;
 }
 
 /*
@@ -207,10 +210,32 @@ int lstgen_grava_csv(Listagen* l, char* nome_arquivo_csv, char* (*cria_linha_csv
 *   Recupera os registro de uma lista genérica a partir de um arquivo CSV.
 *   @params: nome do arquivo CSV, callback para formar um elemento da lista
 *   a partir da string recuperada do arquivo contendo uma linha.
+*   Observação: caso o callback retorne NULL, esta função considerará que a linha será descartada.
 *   @return: ponteiro para uma lista genérica carregada na memória principal.
 *   Returna NULL caso não consiga carregar ou o arquivo esteja vazio.    
 */
 Listagen* lstgen_carrega_csv(char* nome_arquivo_csv, void* (*cria_elemento)(char* linha_csv)){
+    FILE* entrada = fopen(nome_arquivo_csv, "rt");
+    char linha[121];
+    Listagen* l = lstgen_cria();
 
+    if(!entrada){
+        printf("Não pude abrir o arquivo %s...", nome_arquivo_csv);
+        return NULL;
+    }
+    
+    while(fgets(linha,121,entrada) != NULL){
+        
+        void* novo_elemento = cria_elemento(linha);
+        
+        // Caso o callback do cliente retorna NULL, significa dizer que a linha será descartada.
+        if(!novo_elemento)
+            continue;
+        
+        l = lstgen_insere(l, novo_elemento);
+        
+    }
+
+    return l;
 }
 
