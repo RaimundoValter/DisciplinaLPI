@@ -46,7 +46,7 @@ int main(){
     lstgen_percorre(minha_lista_duplicada, cliente_imprime);
 
     
-    printf("Gravando no arquivo...");
+    printf("Gravando no arquivo..."); 
     
     if(lstgen_grava_csv(minha_lista, "listagen_cliente.csv", cria_linha_cliente))
         printf("Deu certo!\n");

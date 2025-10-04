@@ -195,7 +195,7 @@ int lstgen_grava_csv(Listagen* l, char* nome_arquivo_csv, char* (*cria_linha_csv
             fputc(string_csv[i], saida_csv);
             i++;
         }
-        fputc('\n', saida_csv);
+        // fputc('\n', saida_csv);
     }
 
     free(string_csv);
