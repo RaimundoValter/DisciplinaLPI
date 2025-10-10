@@ -8,7 +8,7 @@ int main(){
             arv_cria('D',
                 arv_criavazia(),
                 arv_criavazia())),
-        arv_cria('C',
+        arv_cria('c',
             arv_cria('E', 
             arv_criavazia(),
             arv_criavazia()),
@@ -29,5 +29,10 @@ int main(){
     else
         printf("não pertence à árvore...\n");
 
+    printf("\nA altura da árvore é: %d.\n", arv_altura(Ab));
+
+    printf("\n Possui %d letras minúsculas.", arv_qtd_letra_min(Ab));
+
+    printf("\n Total de folhas: %d", arv_qtd_folhas(Ab));
     return 1;
 }

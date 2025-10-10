@@ -15,6 +15,9 @@
     int arv_vazia(Arv* a);
     int arv_pertence(Arv* a, char c);
     void arv_imprime(Arv* a);
+    int arv_altura(Arv* a);
+    int arv_qtd_letra_min(Arv* a);
+    int arv_qtd_folhas(Arv* a);
 
     #include "TAD_TREE.c"
 #endif
