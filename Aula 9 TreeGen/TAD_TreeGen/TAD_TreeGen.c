@@ -67,17 +67,6 @@ Params
 */ 
 void tree_map(Node* root, void (operation)(void*));
 
-/*INSERT ALL ELEMENTS IN A TREE
-    insert all elements in a tree/subtree starting from the "root" node.
-
-Params
-    source: pointer to the root of the subtree to be copied
-    dest: pointer to the root of the destination tree
-    copy_node: callback function that returns a copy of the element
-    compare: callback function that compares two elements
-*/
-void insert_all(Node* source, Node** dest, void* (copy_info)(void*), int (compare)(void*, void*));
-
 /*COPY A NODE 
     copy a node of a tree.
 Params
@@ -86,7 +75,6 @@ Params
 Returns
     pointer to a copied node.
 */
-
 Node* tree_copy_node(Node* original);
 
 
@@ -102,7 +90,7 @@ Node* tree_copy_node(Node* original);
     Pointer to the head of a list composed by the elements
     that satisfy the condition.
 */
-Lista* tree_filter_as_list(Node* root, int (condition)(void*), void* (copy_info)(void*), int (compare)(void*, void*));
+Listagen* tree_filter_as_list(Node* root, int (condition)(void*), void* (copy_info)(void*));
 
 /*FILTER ELEMENTS IN THE TREE CREATING A NEW TREE
     Gather together a set of elements that satisfy condition inside the tree.
