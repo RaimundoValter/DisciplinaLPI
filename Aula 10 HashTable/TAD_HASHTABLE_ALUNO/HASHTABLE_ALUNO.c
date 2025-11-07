@@ -102,7 +102,6 @@ int hsh_atualiza(Aluno** tab, int mat, char* nome, char* tel, char* email){
     int id_hash = hash(mat);
 
     Aluno* p= tab[id_hash];
-    Aluno* ant = NULL;
 
     while(p != NULL){
         if(p->mat == mat)
@@ -114,11 +113,11 @@ int hsh_atualiza(Aluno** tab, int mat, char* nome, char* tel, char* email){
         strcpy(p->nome, nome);
         strcpy(p->tel, tel);
         strcpy(p->email, email);
-        return p;
+        return 1;
     }
     else  // Caso não encontremos um aluno com matrícula igual.
     {
-        return NULL;
+        return 0;
     }
 }
 
@@ -171,7 +170,70 @@ float hsh_fator_carga(Aluno** tab);
 int hsh_vazia(Aluno** tab);
 
 // 12. Exportar dados para arquivo
-int hsh_exporta_arquivo(Aluno** tab, char* filename, char* (*escrever_linha_csv)(void*));
+int hsh_exporta_arquivo(Aluno** tab, char* filename, char* (*escrever_linha_csv)(void*)){
+    
+    FILE* saida = fopen(filename, "wt");
+
+    if(!saida){
+        printf("Não foi possível abrir o arquivo %s...\n", filename);
+        return 0;
+    }
+
+    Aluno* p = NULL;
+    char* string_csv = NULL;
+    int j = 0;
+
+    for(int i =0 ; i < N; i++){
+        p = tab[i];
+
+        while(p != NULL){
+            string_csv = escrever_linha_csv(p);
+
+            // Caso não consigamos formatar a linha csv referente àquele aluno.
+            if(!string_csv){
+                p = p->prox;
+            }
+
+            printf("\n>> %s\n", string_csv);
+            
+            // Imprime a linha no arquivo.
+            j = 0;
+            while(string_csv[j] != '\0'){
+                fputc(string_csv[j], saida);
+                j++;
+            }
+            // Inclui o caractere de nova linha no arquivo.
+            fputc('\n', saida);
+            // Libera a linha criada
+            free(string_csv);
+            p = p->prox;
+        }
+    }
+    return 1;
+}
 
 // 13. Importar dados de arquivo
-int hsh_importa_arquivo(Aluno** tab, char* filename, void* (*ler_linha_csv)(char*));
+int hsh_importa_arquivo(Aluno** tab, char* filename, void* (*ler_linha_csv)(char*)){
+    FILE* arquivo_entrada = fopen(filename, "rt");
+
+    if(!arquivo_entrada){
+        printf("Não foi possível abrir o arquivo %s...\n", filename);
+        return 0;
+    }
+
+    char linha[121];
+    Aluno* aluno_recuperado;
+
+    while(fgets(linha, 121, arquivo_entrada) != NULL){
+        aluno_recuperado = (Aluno*)ler_linha_csv(linha);
+        if(aluno_recuperado)
+            hsh_insere(
+                tab, 
+                aluno_recuperado->mat, 
+                aluno_recuperado->nome, 
+                aluno_recuperado->tel, 
+                aluno_recuperado->email);
+    }
+
+    return 1;
+}
