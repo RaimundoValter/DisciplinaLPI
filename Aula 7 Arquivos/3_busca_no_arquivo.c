@@ -4,10 +4,11 @@
 
 int main(){
 
-    FILE* fp = fopen("..\\dados.txt", "rt");
+    char nome_arquivo[] = "..\\entrada.txt";
+
+    FILE* fp = fopen(nome_arquivo, "rt");
 
     if(!fp){
-        printf("Deu ruim!\n");
         exit(1);
     }
 
@@ -25,9 +26,10 @@ int main(){
     }
 
     if(achou)
-        printf("Encontrei \"%s\" ocorendo na linha %d...", 
+        printf("Encontrei a subcadeia \"%s\" ocorendo na linha %d do arquivo %s...", 
             subcadeia, 
-            n_linha);
+            n_linha,
+            nome_arquivo);
     else
         printf("Não está no arquivo...\n");
 
