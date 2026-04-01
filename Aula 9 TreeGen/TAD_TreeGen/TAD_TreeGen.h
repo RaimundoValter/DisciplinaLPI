@@ -27,6 +27,7 @@
     Node* tree_insert_node(Node* root, Node* new_node, int (*compare)(void*, void*));
     
     int tree_get_height(Node* root);
+    int tree_how_many_nodes(Node* root); 
     
     Node* rotate_right(Node* root);
     Node* rotate_left(Node* root);
